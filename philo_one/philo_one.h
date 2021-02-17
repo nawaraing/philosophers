@@ -1,19 +1,31 @@
-#ifndef	PHILO_ONE_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_one.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: junkang <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/17 22:21:41 by junkang           #+#    #+#             */
+/*   Updated: 2021/02/17 22:25:51 by junkang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PHILO_ONE_H
 # define PHILO_ONE_H
 
-# include	<pthread.h>
-# include	<sys/time.h>
-# include	<stdio.h>
-# include	<stdlib.h>
-# include	<unistd.h>
-# include	<string.h>
-# include	<limits.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <limits.h>
 
-# define 	FORK	1
-# define	EAT		2
-# define	SLEEP	3
-# define	THINK	4
-# define	DIED	5
+# define FORK	1
+# define EAT	2
+# define SLEEP	3
+# define THINK	4
+# define DIED	5
 
 typedef struct	s_data
 {
@@ -21,7 +33,7 @@ typedef struct	s_data
 	int					time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
-	int					number_of_times_each_philo_must_eat;	// 없으면 -1
+	int					number_of_times_each_philo_must_eat;
 
 	int					is_end;
 	unsigned long		start_time;
