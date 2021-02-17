@@ -9,9 +9,11 @@
 # include	<string.h>
 # include	<limits.h>
 
-# define 	BLUE	"\033[34m"
-# define	UNSET	"\033[0m"
-
+# define 	FORK	1
+# define	EAT		2
+# define	SLEEP	3
+# define	THINK	4
+# define	DIED	5
 
 typedef struct	s_data
 {
@@ -29,6 +31,12 @@ typedef struct	s_data
 	pthread_mutex_t		mutex[200];
 }				t_data;
 
+void			create_philo(void);
+
+int				check_someone_die(void);
+void			print_status(int philo_id, int status);
+unsigned long	cur_time(void);
 int				ft_atoi(const char *nptr);
+void			new_sleep(int usec);
 
 #endif
