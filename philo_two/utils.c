@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: junkang <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/17 22:22:10 by junkang           #+#    #+#             */
+/*   Updated: 2021/02/17 22:26:22 by junkang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_one.h"
 
 extern t_data	g_data;
@@ -47,7 +59,7 @@ void			new_sleep(int usec)
 	}
 }
 
-int		ft_atoi(const char *nptr)
+int				ft_atoi(const char *nptr)
 {
 	unsigned long long		res;
 	int						sign;

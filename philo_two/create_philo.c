@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_philo.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: junkang <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/17 22:22:18 by junkang           #+#    #+#             */
+/*   Updated: 2021/02/17 22:23:56 by junkang          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_one.h"
 
 extern t_data	g_data;
@@ -23,7 +35,7 @@ static int		do_eat(int philo_id)
 	else
 		pthread_mutex_lock(&(g_data.mutex[philo_id - 1]));
 	if (check_someone_die() == 0)
-	pthread_mutex_lock(&(g_data.mutex[philo_id]));
+		pthread_mutex_lock(&(g_data.mutex[philo_id]));
 	if (check_someone_die() == 0)
 	{
 		print_status(philo_id, EAT);
