@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
 t_data			g_data;
 
@@ -76,16 +76,28 @@ void			destroy_data(void)
 	sem_unlink(SEM_NAME);
 }
 
+void			process_create(pid_t *process, void *(*func) (void *), void *arg)
+{
+	arg = NULL;
+	*process = fork();
+	if (!(*process))
+	{
+		func(arg);
+		exit(0);
+	}
+}
+
 int				main(int argc, char *argv[])
 {
-	pthread_t			thread;
+	pid_t			process;
+	int				status;
 
 	destroy_data();
 	if (init_data(argc, argv) < 0)
 		return (0);
-	pthread_create(&thread, NULL, work_supervisor, NULL);
+	process_create(&process, work_supervisor, NULL);
 	create_philo();
-	pthread_join(thread, NULL);
+	waitpid(process, &status, 0);
 	destroy_data();
 	return (0);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
 extern t_data	g_data;
 
@@ -28,10 +28,12 @@ static int		do_sleep_and_think(int philo_id)
 
 static int		do_eat(int philo_id)
 {
-	if (check_someone_die() == 0)
+	if (check_someone_die())
+		return (-1);
+	if (philo_id == 1)
 		sem_wait(g_data.sem);
-	if (check_someone_die() == 0)
-		print_status(philo_id, FORK);
+	else
+		sem_wait(g_data.sem);
 	if (check_someone_die() == 0)
 		sem_wait(g_data.sem);
 	if (check_someone_die() == 0)
@@ -41,7 +43,10 @@ static int		do_eat(int philo_id)
 	}
 	g_data.last_eat[philo_id] = cur_time();
 	new_sleep(g_data.time_to_eat);
-	sem_post(g_data.sem);
+	if (philo_id == 1)
+		sem_post(g_data.sem);
+	else
+		sem_post(g_data.sem);
 	sem_post(g_data.sem);
 	if (check_someone_die())
 		return (-1);
@@ -63,14 +68,15 @@ static void		*each_philo(void *philo_id)
 void			create_philo(void)
 {
 	int					i;
-	pthread_t			thread[201];
+	pid_t				process[201];
 	int					philo[201];
+	int					status;
 
 	i = 0;
 	while (++i * 2 - 1 <= g_data.number_of_philo)
 	{
 		philo[i * 2 - 1] = i * 2 - 1;
-		pthread_create(&thread[i * 2 - 1], NULL, each_philo, \
+		process_create(&process[i * 2 - 1], each_philo, \
 						(void *)&(philo[i * 2 - 1]));
 	}
 	new_sleep(1);
@@ -78,10 +84,10 @@ void			create_philo(void)
 	while (++i * 2 <= g_data.number_of_philo)
 	{
 		philo[i * 2] = i * 2;
-		pthread_create(&thread[i * 2], NULL, each_philo, \
+		process_create(&process[i * 2], each_philo, \
 						(void *)&(philo[i * 2]));
 	}
 	i = 0;
 	while (++i <= g_data.number_of_philo)
-		pthread_join(thread[i], NULL);
+		waitpid(process[i], &status, 0);
 }

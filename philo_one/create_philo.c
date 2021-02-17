@@ -35,6 +35,8 @@ static int		do_eat(int philo_id)
 	else
 		pthread_mutex_lock(&(g_data.mutex[philo_id - 1]));
 	if (check_someone_die() == 0)
+		print_status(philo_id, FORK);
+	if (check_someone_die() == 0)
 		pthread_mutex_lock(&(g_data.mutex[philo_id]));
 	if (check_someone_die() == 0)
 	{
