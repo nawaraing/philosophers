@@ -28,12 +28,10 @@ static int		do_sleep_and_think(int philo_id)
 
 static int		do_eat(int philo_id)
 {
-	if (check_someone_die())
-		return (-1);
-	if (philo_id == 1)
+	if (check_someone_die() == 0)
 		sem_wait(g_data.sem);
-	else
-		sem_wait(g_data.sem);
+	if (check_someone_die() == 0)
+		print_status(philo_id, FORK);
 	if (check_someone_die() == 0)
 		sem_wait(g_data.sem);
 	if (check_someone_die() == 0)
@@ -43,10 +41,7 @@ static int		do_eat(int philo_id)
 	}
 	g_data.last_eat[philo_id] = cur_time();
 	new_sleep(g_data.time_to_eat);
-	if (philo_id == 1)
-		sem_post(g_data.sem);
-	else
-		sem_post(g_data.sem);
+	sem_post(g_data.sem);
 	sem_post(g_data.sem);
 	if (check_someone_die())
 		return (-1);
