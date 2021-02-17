@@ -14,6 +14,7 @@
 # define PHILO_ONE_H
 
 # include <pthread.h>
+# include <semaphore.h>
 # include <sys/time.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -21,11 +22,12 @@
 # include <string.h>
 # include <limits.h>
 
-# define FORK	1
-# define EAT	2
-# define SLEEP	3
-# define THINK	4
-# define DIED	5
+# define FORK		1
+# define EAT		2
+# define SLEEP		3
+# define THINK		4
+# define DIED		5
+# define SEM_NAME	"junkang"
 
 typedef struct	s_data
 {
@@ -40,7 +42,7 @@ typedef struct	s_data
 	unsigned long		last_time;
 	unsigned long		last_eat[200];
 	int					eat_cnt[200];
-	pthread_mutex_t		mutex[200];
+	sem_t				*sem;
 }				t_data;
 
 void			create_philo(void);

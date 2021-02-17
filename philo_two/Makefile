@@ -10,10 +10,10 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philo_one
+NAME = philo_two
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-INCL = philo_one.h
+INCL = philo_two.h
 SRCS = main.c \
 	   create_philo.c \
 	   utils.c

@@ -31,11 +31,11 @@ static int		do_eat(int philo_id)
 	if (check_someone_die())
 		return (-1);
 	if (philo_id == 1)
-		pthread_mutex_lock(&(g_data.mutex[g_data.number_of_philo]));
+		sem_wait(g_data.sem);
 	else
-		pthread_mutex_lock(&(g_data.mutex[philo_id - 1]));
+		sem_wait(g_data.sem);
 	if (check_someone_die() == 0)
-		pthread_mutex_lock(&(g_data.mutex[philo_id]));
+		sem_wait(g_data.sem);
 	if (check_someone_die() == 0)
 	{
 		print_status(philo_id, EAT);
@@ -44,10 +44,10 @@ static int		do_eat(int philo_id)
 	g_data.last_eat[philo_id] = cur_time();
 	new_sleep(g_data.time_to_eat);
 	if (philo_id == 1)
-		pthread_mutex_unlock(&(g_data.mutex[g_data.number_of_philo]));
+		sem_post(g_data.sem);
 	else
-		pthread_mutex_unlock(&(g_data.mutex[philo_id - 1]));
-	pthread_mutex_unlock(&(g_data.mutex[philo_id]));
+		sem_post(g_data.sem);
+	sem_post(g_data.sem);
 	if (check_someone_die())
 		return (-1);
 	return (0);

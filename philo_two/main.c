@@ -36,8 +36,8 @@ int				init_data(int argc, char *argv[])
 	{
 		g_data.last_eat[i] = g_data.start_time;
 		g_data.eat_cnt[i] = 0;
-		pthread_mutex_init(&(g_data.mutex[i]), NULL);
 	}
+	g_data.sem = sem_open(SEM_NAME, O_CREAT, 0644, g_data.number_of_philo);
 	return (0);
 }
 
@@ -72,17 +72,15 @@ void			*work_supervisor(void *trash)
 
 void			destroy_data(void)
 {
-	int		i;
-
-	i = 0;
-	while (++i <= g_data.number_of_philo)
-		pthread_mutex_destroy(&(g_data.mutex[i]));
+	sem_close(g_data.sem);
+	sem_unlink(SEM_NAME);
 }
 
 int				main(int argc, char *argv[])
 {
 	pthread_t			thread;
 
+	destroy_data();
 	if (init_data(argc, argv) < 0)
 		return (0);
 	pthread_create(&thread, NULL, work_supervisor, NULL);
