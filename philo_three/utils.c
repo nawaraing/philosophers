@@ -16,7 +16,7 @@ extern t_data	g_data;
 
 int				check_someone_die(void)
 {
-	return (g_data.is_end);
+	return (g_data.is_end == DIED);
 }
 
 void			print_status(int philo_id, int status)

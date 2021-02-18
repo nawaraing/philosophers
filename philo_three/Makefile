@@ -16,6 +16,7 @@ CFLAGS = -Wall -Wextra -Werror
 INCL = philo_three.h
 SRCS = main.c \
 	   create_philo.c \
+	   process_create.c \
 	   utils.c
 
 all : ${NAME}

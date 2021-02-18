@@ -23,6 +23,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <limits.h>
+# include <signal.h>
 
 # define FORK		1
 # define EAT		2
@@ -42,14 +43,15 @@ typedef struct	s_data
 	int					is_end;
 	unsigned long		start_time;
 	unsigned long		last_time;
-	unsigned long		last_eat[200];
-	int					eat_cnt[200];
+	unsigned long		last_eat;
+	int					eat_cnt;
 	sem_t				*sem;
 }				t_data;
 
 void			process_create(pid_t *process, void *(*func) (void *), void *arg);
+void			*each_philo(void *philo_id);
 
-void			create_philo(void);
+void			create_philo(pid_t process[]);
 
 int				check_someone_die(void);
 void			print_status(int philo_id, int status);

@@ -34,40 +34,11 @@ int				init_data(int argc, char *argv[])
 	i = 0;
 	while (++i <= g_data.number_of_philo)
 	{
-		g_data.last_eat[i] = g_data.start_time;
-		g_data.eat_cnt[i] = 0;
+		g_data.last_eat = g_data.start_time;
+		g_data.eat_cnt = 0;
 	}
 	g_data.sem = sem_open(SEM_NAME, O_CREAT, 0644, g_data.number_of_philo);
 	return (0);
-}
-
-void			*work_supervisor(void *trash)
-{
-	int		i;
-	int		still_hungry;
-
-	trash = NULL;
-	while (1)
-	{
-		still_hungry = 0;
-		if (g_data.number_of_times_each_philo_must_eat == -1)
-			still_hungry = 1;
-		i = 0;
-		while (++i <= g_data.number_of_philo)
-		{
-			if (g_data.last_eat[i] + 1000 * g_data.time_to_die < cur_time())
-			{
-				print_status(i, DIED);
-				g_data.is_end = 1;
-			}
-			if (g_data.eat_cnt[i] < g_data.number_of_times_each_philo_must_eat)
-				still_hungry = 1;
-		}
-		if (still_hungry == 0)
-			g_data.is_end = 1;
-		if (g_data.is_end)
-			return (NULL);
-	}
 }
 
 void			destroy_data(void)
@@ -76,28 +47,25 @@ void			destroy_data(void)
 	sem_unlink(SEM_NAME);
 }
 
-void			process_create(pid_t *process, void *(*func) (void *), void *arg)
+void			kill_process(pid_t process[])
 {
-	arg = NULL;
-	*process = fork();
-	if (!(*process))
-	{
-		func(arg);
-		exit(0);
-	}
+	int			i;
+
+	i = 0;
+	while (++i <= g_data.number_of_philo)
+		kill(process[i], SIGKILL);
 }
+
 
 int				main(int argc, char *argv[])
 {
-	pid_t			process;
-	int				status;
+	pid_t				process[201];
 
 	destroy_data();
 	if (init_data(argc, argv) < 0)
 		return (0);
-	process_create(&process, work_supervisor, NULL);
-	create_philo();
-	waitpid(process, &status, 0);
+	create_philo(process);
+	kill_process(process);
 	destroy_data();
 	return (0);
 }

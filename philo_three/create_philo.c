@@ -28,6 +28,8 @@ static int		do_sleep_and_think(int philo_id)
 
 static int		do_eat(int philo_id)
 {
+	if (check_someone_die())
+		return (-1);
 	if (check_someone_die() == 0)
 		sem_wait(g_data.sem);
 	if (check_someone_die() == 0)
@@ -37,9 +39,9 @@ static int		do_eat(int philo_id)
 	if (check_someone_die() == 0)
 	{
 		print_status(philo_id, EAT);
-		g_data.eat_cnt[philo_id]++;
+		g_data.eat_cnt++;
 	}
-	g_data.last_eat[philo_id] = cur_time();
+	g_data.last_eat = cur_time();
 	new_sleep(g_data.time_to_eat);
 	sem_post(g_data.sem);
 	sem_post(g_data.sem);
@@ -48,7 +50,7 @@ static int		do_eat(int philo_id)
 	return (0);
 }
 
-static void		*each_philo(void *philo_id)
+void			*each_philo(void *philo_id)
 {
 	while (1)
 	{
@@ -60,12 +62,38 @@ static void		*each_philo(void *philo_id)
 	return (NULL);
 }
 
-void			create_philo(void)
+static void		check_processes(pid_t process[])
+{
+	int		visit[201];
+	int		ret;
+	int		i;
+	int		status;
+
+	memset(visit, 0, sizeof(visit));
+	while (1)
+	{
+		i = 0;
+		while (++i <= g_data.number_of_philo)
+		{
+			ret = waitpid(process[i], &status, WNOHANG);
+			if (visit[i] || ret == 0)
+				continue ;
+			if (WEXITSTATUS(status) == EAT)
+			{
+				visit[i] = 1;
+				if (++visit[0] == g_data.number_of_philo)
+					return ;
+			}
+			else if (WEXITSTATUS(status) == DIED)
+				return ;
+		}
+	}
+}
+
+void			create_philo(pid_t process[])
 {
 	int					i;
-	pid_t				process[201];
 	int					philo[201];
-	int					status;
 
 	i = 0;
 	while (++i * 2 - 1 <= g_data.number_of_philo)
@@ -82,7 +110,5 @@ void			create_philo(void)
 		process_create(&process[i * 2], each_philo, \
 						(void *)&(philo[i * 2]));
 	}
-	i = 0;
-	while (++i <= g_data.number_of_philo)
-		waitpid(process[i], &status, 0);
+	check_processes(process);
 }

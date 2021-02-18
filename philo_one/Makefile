@@ -24,9 +24,6 @@ ${NAME} :
 	${CC} ${CFLAGS} ${SRCS} -o ${NAME}
 
 clean :
-	rm -f ${OBJS}
-
-fclean : clean
 	rm -f ${NAME}
 
-re : fclean all
+re : clean all
