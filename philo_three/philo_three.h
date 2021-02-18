@@ -48,7 +48,8 @@ typedef struct	s_data
 	sem_t				*sem;
 }				t_data;
 
-void			process_create(pid_t *process, void *(*func) (void *), void *arg);
+void			process_create(pid_t *process,\
+								void *(*func)(void *), void *arg);
 void			*each_philo(void *philo_id);
 
 void			create_philo(pid_t process[]);
