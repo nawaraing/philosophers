@@ -56,7 +56,6 @@ void			kill_process(pid_t process[])
 		kill(process[i], SIGKILL);
 }
 
-
 int				main(int argc, char *argv[])
 {
 	pid_t				process[201];
